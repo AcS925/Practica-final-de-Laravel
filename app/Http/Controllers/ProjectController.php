@@ -61,6 +61,10 @@ class ProjectController extends Controller
 
   public function addParticipant(Request $request, Project $proyecto)
   {
+
+    // Comprobar que el usuario autenticado es el creador
+    abort_unless($proyecto->user_id === $request->user()->id, 403);
+
     $datos = $request->validate([
       'user_id' => 'required|exists:users,id',
     ]);
@@ -71,6 +75,24 @@ class ProjectController extends Controller
     ]);
 
     return back()->with('success', 'Participante añadido correctamente.');
+  }
+
+  public function myProjects()
+  {
+    $usuario = auth()->user();
+
+    $proyectos = Project::with(['user', 'participants'])
+      ->where('user_id', $usuario->id)
+      ->orWhereHas('participants', function ($query) use ($usuario) {
+        $query->where('users.id', $usuario->id);
+      })
+      ->latest()
+      ->paginate(10);
+
+    return view('proyectos.index', [
+      'proyectos' => $proyectos,
+      'titulo' => 'Mis proyectos'
+    ]);
   }
 
   // Mostrar formulario de edición

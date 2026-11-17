@@ -11,7 +11,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-  return view('dashboard');
+  return redirect()->route('proyectos.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -25,6 +25,9 @@ Route::post(
   '/proyectos/{proyecto}/participantes',
   [ProjectController::class, 'addParticipant']
 )->name('proyectos.participants.add');
+
+Route::get('/mis-proyectos', [ProjectController::class, 'myProjects'])
+  ->name('proyectos.mine');
 
 
 require __DIR__ . '/auth.php';

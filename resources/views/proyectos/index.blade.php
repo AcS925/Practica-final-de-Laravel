@@ -3,9 +3,15 @@
   <x-slot name="header">
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="font-bold text-2xl text-gray-900">
-          Mis proyectos
-        </h2>
+        <a href="{{ route('proyectos.mine') }}"
+          class="font-bold text-2xl text-gray-900 hover:text-indigo-600 transition">
+
+          <h2>
+            Mis proyectos
+          </h2>
+
+        </a>
+
         <p class="text-sm text-gray-500 mt-1">
           Gestiona y consulta tus proyectos.
         </p>
@@ -18,7 +24,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       {{-- Cabecera de la sección --}}
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4 p-6">
 
         <div>
           <h3 class="text-lg font-semibold text-gray-800">
@@ -30,7 +36,7 @@
         </div>
 
         <a href="{{ route('proyectos.create') }}"
-          class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-3 rounded-lg shadow-sm transition">
+          class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-grey-700 font-medium px-5 py-3 rounded-lg shadow-sm transition">
           + Crear proyecto
         </a>
 
@@ -132,7 +138,7 @@
 
         @empty
 
-          <div class="col-span-full bg-white border border-gray-200 rounded-xl p-12 text-center">
+          <div class="col-span-full bg-white border border-gray-200 rounded-xl p-16 text-center">
 
             <h4 class="text-lg font-semibold text-gray-800 mb-2">
               Todavía no hay proyectos
@@ -143,7 +149,7 @@
             </p>
 
             <a href="{{ route('proyectos.create') }}"
-              class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg transition">
+              class="inline-block bg-indigo-600 hover:bg-indigo-700 text-grey px-5 py-2 rounded-lg transition">
               Crear primer proyecto
             </a>
 

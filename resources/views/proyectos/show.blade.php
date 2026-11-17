@@ -1,7 +1,7 @@
 <x-app-layout>
   <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      Detalles del proyecto
+      {{ $titulo ?? 'Proyectos' }}
     </h2>
   </x-slot>
 
@@ -57,33 +57,29 @@
 
         @endforelse
 
-        @if ($usuariosDisponibles->isNotEmpty())
+        @if ($proyecto->user_id === auth()->id() && $usuariosDisponibles->isNotEmpty())
 
           <h4 class="font-bold mt-6 mb-2">
             Añadir participante
           </h4>
 
           <form action="{{ route('proyectos.participants.add', $proyecto) }}" method="POST">
-
             @csrf
 
             <select name="user_id" class="border-gray-300 rounded-md">
-
               @foreach ($usuariosDisponibles as $usuario)
                 <option value="{{ $usuario->id }}">
                   {{ $usuario->name }}
                 </option>
               @endforeach
-
             </select>
 
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
               Añadir
             </button>
-
           </form>
 
-        @else
+        @elseif ($proyecto->user_id === auth()->id())
 
           <p class="mt-4 text-gray-500">
             No hay más usuarios disponibles.
