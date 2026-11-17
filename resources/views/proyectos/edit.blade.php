@@ -73,6 +73,65 @@
             @enderror
           </div>
 
+          {{-- Colaboradores --}}
+          <div class="mt-8">
+            <h3 class="text-lg font-bold mb-4">Colaboradores</h3>
+
+            @forelse ($proyecto->participants as $participante)
+
+              <div class="border rounded-lg p-4 mb-4">
+
+                <h4 class="font-semibold mb-3">
+                  {{ $participante->name }}
+                </h4>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                  {{-- Rol --}}
+                  <div>
+                    <label class="block text-sm font-medium mb-1">
+                      Rol
+                    </label>
+
+                    <select name="participants[{{ $participante->id }}][role]"
+                      class="block w-full border-gray-300 rounded-md">
+
+                      <option value="developer" @selected($participante->pivot->role === 'developer')>
+                        Desarrollador
+                      </option>
+
+                      <option value="designer" @selected($participante->pivot->role === 'designer')>
+                        Diseñador
+                      </option>
+
+                      <option value="manager" @selected($participante->pivot->role === 'manager')>
+                        Gestor
+                      </option>
+
+                    </select>
+                  </div>
+
+                  {{-- Horas --}}
+                  <div>
+                    <label class="block text-sm font-medium mb-1">
+                      Horas trabajadas
+                    </label>
+
+                    <input type="number" name="participants[{{ $participante->id }}][contribution_hours]"
+                      value="{{ old('participants.' . $participante->id . '.contribution_hours', $participante->pivot->contribution_hours) }}"
+                      min="0" class="block w-full border-gray-300 rounded-md">
+                  </div>
+
+                </div>
+              </div>
+
+            @empty
+              <p class="text-gray-500">
+                Este proyecto todavía no tiene colaboradores.
+              </p>
+            @endforelse
+          </div>
+
           <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
             Guardar cambios
           </button>

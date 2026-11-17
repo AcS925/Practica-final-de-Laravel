@@ -98,8 +98,9 @@ class ProjectController extends Controller
   // Mostrar formulario de edición
   public function edit(Request $request, Project $proyecto)
   {
-    // Solo el creador puede editar el proyecto
     abort_unless($proyecto->user_id === $request->user()->id, 403);
+
+    $proyecto->load('participants');
 
     return view('proyectos.edit', compact('proyecto'));
   }
@@ -115,9 +116,28 @@ class ProjectController extends Controller
       'description' => 'required|string',
       'due_date' => 'nullable|date',
       'status' => 'required|in:pending,in_progress,completed',
+
+      'participants' => 'sometimes|array',
+      'participants.*.role' => 'required|in:developer,designer,manager',
+      'participants.*.contribution_hours' => 'required|integer|min:0',
     ]);
 
+    $participantes = $datos['participants'] ?? [];
+
+    unset($datos['participants']);
+
     $proyecto->update($datos);
+
+    foreach ($participantes as $userId => $datosParticipante) {
+
+      if ($proyecto->participants()->where('users.id', $userId)->exists()) {
+
+        $proyecto->participants()->updateExistingPivot($userId, [
+          'role' => $datosParticipante['role'],
+          'contribution_hours' => $datosParticipante['contribution_hours'],
+        ]);
+      }
+    }
 
     return redirect()->route('proyectos.index')
       ->with('success', 'Proyecto actualizado correctamente.');
